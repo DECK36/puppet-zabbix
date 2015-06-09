@@ -257,7 +257,11 @@ class zabbix::web (
 
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
-    include apache
+    class {'apache':
+      mpm_module => 'prefork',
+    }
+    include apache::mod::php
+
     # Check if we use ssl. If so, we also create an non ssl
     # vhost for redirect traffic from non ssl to ssl site.
     if $apache_use_ssl {
